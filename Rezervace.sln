@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rezervace", "Rezervace\Rezervace.csproj", "{BED4BFBA-BFED-4B8B-AD7E-BB78A9F6D71D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BED4BFBA-BFED-4B8B-AD7E-BB78A9F6D71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BED4BFBA-BFED-4B8B-AD7E-BB78A9F6D71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BED4BFBA-BFED-4B8B-AD7E-BB78A9F6D71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BED4BFBA-BFED-4B8B-AD7E-BB78A9F6D71D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E92A2D69-314F-4393-8232-9230A1CDB7C6}
+	EndGlobalSection
+EndGlobal

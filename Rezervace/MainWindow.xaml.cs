@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace Rezervace
 {
-    /// <summary>
-    /// Interakční logika pro MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private int fontsize = 19;
@@ -32,6 +30,7 @@ namespace Rezervace
         {
             Button btn = sender as Button;
             btn.Background = btn.Background == Brushes.Red ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD")) : Brushes.Red;
+            Console.WriteLine(btn.Tag + " " + btn.Content);
         }
 
         void CreateRowsAndColums()
@@ -80,8 +79,12 @@ namespace Rezervace
                         Button button = new Button()
                         {
                             Content = string.Format(j.ToString()),
+                            FontSize = 10,
                             Tag = i,
+                            Margin = new Thickness(5),
+                            BorderBrush = Brushes.Blue,
                         };
+                        
                         Grid.SetRow(button, i);
                         Grid.SetColumn(button, j);
                         button.Click += new RoutedEventHandler(button_Click);

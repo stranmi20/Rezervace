@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -18,7 +19,10 @@ namespace Rezervace
 {
     public partial class MainWindow : Window
     {
+        private List<int[]> takenSeats = new List<int[]>();
+        private bool confirmwindowopen = false;
         private int fontsize = 19;
+        private int seatsinlist = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,7 +34,12 @@ namespace Rezervace
         {
             Button btn = sender as Button;
             btn.Background = btn.Background == Brushes.Red ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD")) : Brushes.Red;
-            Console.WriteLine(btn.Tag + " " + btn.Content);
+            Int32.TryParse(btn.Tag.ToString(), out int tag);
+            Int32.TryParse(btn.Content.ToString(), out int content);
+            int[] seat = new int[2];
+            seat[0] = tag;
+            seat[1] = content;
+            takenSeats.Add(seat);
         }
 
         void CreateRowsAndColums()
@@ -60,8 +69,8 @@ namespace Rezervace
             };
             Grid.SetColumnSpan(label, 24);
             Grid.SetRow(label, 0);
-            grid.Children.Add(label);
-            for (int i = 1; i < 12; i++)
+            grid.Children.Add(label); 
+            for (int i = 1; i < 11; i++)
             {
                 for (int j = 0; j < 24; j++)
                 {
@@ -92,6 +101,26 @@ namespace Rezervace
                     }
                     
                 }
+            }
+
+            Button subButton = new Button()
+            {
+                Content = "Submit",
+                FontSize = 10
+            };
+            Grid.SetRow(subButton, 12);
+            Grid.SetColumn(subButton, 9);
+            Grid.SetColumnSpan(subButton, 6);
+            subButton.Click += new RoutedEventHandler(subButton_Click);
+            grid.Children.Add(subButton);
+        }
+
+        void subButton_Click(object sender, RoutedEventArgs e)
+        {
+            confirm cwindow = new confirm(takenSeats);
+            if (!confirmwindowopen)
+            {
+                cwindow.Show();
             }
         }
     }

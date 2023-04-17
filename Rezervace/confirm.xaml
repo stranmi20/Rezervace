@@ -7,8 +7,44 @@
         mc:Ignorable="d"
         MinHeight="450"
         MinWidth="600"
-        Title="confirm">
+        Title="confirm" Width="600" Height="450"
+        x:Name="window">
     <Grid x:Name="grid">
-        
+        <Label Content="Potvrzení" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="193" FontWeight="Bold" FontSize="24" HorizontalContentAlignment="Center"/>
+        <Label Margin="126,80,0,0" VerticalAlignment="Top" Height="47" x:Name="seats"/>
+        <Label Content="SEDADLO:" HorizontalAlignment="Left" Margin="58,80,0,0" VerticalAlignment="Top" Height="47" Width="69" x:Name="seats_Copy" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="0.305"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="0.463"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Button Content="Zarezervovat" HorizontalAlignment="Center" Margin="0,332,0,0" VerticalAlignment="Top" Height="51" Width="146" Click="ButtonBase_OnClick"/>
+        <TextBox HorizontalAlignment="Left" Height="36" Margin="388,150,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="178" HorizontalContentAlignment="Left" x:Name="emailBox" VerticalContentAlignment="Center"/>
+        <Label Content="Email:" HorizontalAlignment="Left" Margin="315,153,0,0" VerticalAlignment="Top" Height="30" Width="69" x:Name="seats_Copy1" RenderTransformOrigin="0.5,0.5" FontSize="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="0.305"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="0.463"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox HorizontalAlignment="Left" Height="36" Margin="388,202,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="178" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" x:Name="nameBox"/>
+        <Label Content="Jméno:" HorizontalAlignment="Left" Margin="315,205,0,0" VerticalAlignment="Top" Height="30" Width="69" x:Name="seats_Copy2" RenderTransformOrigin="0.5,0.5" FontSize="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="0.305"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="0.463"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label Content="Zadejte Správné údaje" HorizontalAlignment="Left" Margin="227,301,0,0" VerticalAlignment="Top" Width="193" RenderTransformOrigin="0.442,-0.025" Foreground="red" x:Name="error" Visibility="Hidden"/>
     </Grid>
 </Window>

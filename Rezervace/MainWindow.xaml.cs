@@ -22,7 +22,6 @@ namespace Rezervace
         private List<int[]> takenSeats = new List<int[]>();
         private bool confirmwindowopen = false;
         private int fontsize = 19;
-        private int seatsinlist = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,12 +33,25 @@ namespace Rezervace
         {
             Button btn = sender as Button;
             btn.Background = btn.Background == Brushes.Red ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD")) : Brushes.Red;
-            Int32.TryParse(btn.Tag.ToString(), out int tag);
-            Int32.TryParse(btn.Content.ToString(), out int content);
-            int[] seat = new int[2];
-            seat[0] = tag;
-            seat[1] = content;
-            takenSeats.Add(seat);
+            if (btn.Background == Brushes.Red)
+            {
+                Int32.TryParse(btn.Tag.ToString(), out int tag);
+                Int32.TryParse(btn.Content.ToString(), out int content);
+                int[] seat = new int[2];
+                seat[0] = tag;
+                seat[1] = content;
+                takenSeats.Add(seat);
+            }
+            else
+            {
+                Int32.TryParse(btn.Tag.ToString(), out int tag);
+                Int32.TryParse(btn.Content.ToString(), out int content);
+                int[] seat = new int[2];
+                seat[0] = tag;
+                seat[1] = content;
+                int index = takenSeats.IndexOf(seat);
+                takenSeats.RemoveAt(index+1);
+            }
         }
 
         void CreateRowsAndColums()
@@ -117,8 +129,13 @@ namespace Rezervace
 
         void subButton_Click(object sender, RoutedEventArgs e)
         {
+            bool confirmwindowready = true;
+            if (takenSeats.Count == 0)
+            {
+                confirmwindowopen = false;
+            }
             confirm cwindow = new confirm(takenSeats);
-            if (!confirmwindowopen)
+            if (confirmwindowopen)
             {
                 cwindow.Show();
             }

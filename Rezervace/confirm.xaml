@@ -8,7 +8,7 @@
         MinHeight="450"
         MinWidth="600"
         Title="confirm">
-    <Grid>
+    <Grid x:Name="grid">
         
     </Grid>
 </Window>

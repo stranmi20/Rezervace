@@ -23,9 +23,23 @@ namespace Rezervace
         {
             InitializeComponent();
         }
-        public confirm(List<int[]> taknseats)
+        public confirm(List<int[]> takenseats)
         {
-
+            for (int i = 0; i < 12; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition());
+            }
+            for (int j = 0; j < 24; j++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+            for (int i = 0; i < takenseats.Count; i++)
+            {
+                Label lbl = new Label();
+                lbl.Content = takenseats[i];
+                lbl.HorizontalContentAlignment = HorizontalAlignment.Center;
+                grid.Children.Add(lbl);
+            }
         }
     }
 }

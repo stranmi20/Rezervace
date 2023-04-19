@@ -1,33 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Rezervace
 {
     public partial class MainWindow : Window
     {
         private List<int[]> takenSeats = new List<int[]>();
-        private bool confirmwindowopen = false;
         private int fontsize = 19;
         public MainWindow()
         {
             InitializeComponent();
             CreateRowsAndColums();
             CreateButtons();
-            
+
         }
         void button_Click(object sender, RoutedEventArgs e)
         {
@@ -49,9 +38,20 @@ namespace Rezervace
                 int[] seat = new int[2];
                 seat[0] = tag;
                 seat[1] = content;
-                int index = takenSeats.IndexOf(seat);
-                takenSeats.RemoveAt(index+1);
+                int index = getIndex(takenSeats, seat);
+                takenSeats.RemoveAt(index);
             }
+        }
+
+        private int getIndex(List<int[]> takenseats, int[] seat)
+        {
+            int index = 0;
+            foreach (int[] tk in takenseats)
+            {
+                if (tk[0] == seat[0] && tk[1] == seat[1]) { return index; }
+                index++;
+            }
+            return index;
         }
 
         void CreateRowsAndColums()
@@ -77,11 +77,11 @@ namespace Rezervace
                 FontSize = fontsize,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
-                
+
             };
             Grid.SetColumnSpan(label, 24);
             Grid.SetRow(label, 0);
-            grid.Children.Add(label); 
+            grid.Children.Add(label);
             for (int i = 1; i < 11; i++)
             {
                 for (int j = 0; j < 24; j++)
@@ -105,13 +105,13 @@ namespace Rezervace
                             Margin = new Thickness(5),
                             BorderBrush = Brushes.Blue,
                         };
-                        
+
                         Grid.SetRow(button, i);
                         Grid.SetColumn(button, j);
                         button.Click += new RoutedEventHandler(button_Click);
                         this.grid.Children.Add(button);
                     }
-                    
+
                 }
             }
 
@@ -132,10 +132,10 @@ namespace Rezervace
             bool confirmwindowready = true;
             if (takenSeats.Count == 0)
             {
-                confirmwindowopen = false;
+                confirmwindowready = false;
             }
             confirm cwindow = new confirm(takenSeats);
-            if (confirmwindowopen)
+            if (confirmwindowready)
             {
                 cwindow.Show();
             }

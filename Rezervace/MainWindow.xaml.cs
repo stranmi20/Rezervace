@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,9 +40,23 @@ namespace Rezervace
             return films;
         }
 
-        private void LvFilms_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine("asdasd");
+            var item = sender as ListViewItem;
+
+            if (item != null && item.IsSelected)
+            {
+                var s = item.Content;
+                var cinema = s.GetType().GetProperty("cinema").GetValue(s, null);
+                var rows = cinema.GetType().GetProperty("rows").GetValue(cinema, null);
+                var columns = cinema.GetType().GetProperty("columns").GetValue(cinema, null);
+                Int32.TryParse(rows.ToString(), out int row);
+                Int32.TryParse(columns.ToString(), out int column);
+                
+
+                Seats seats = new Seats(row, column);
+                seats.Show();
+            }
         }
     }
 

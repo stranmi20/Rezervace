@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Window1" RenderTransformOrigin="0.5,0.5" Width="1920" Height="1080">
     <Grid x:Name="Grid">
-        <ListView Margin="10" Name="lvFilms" MouseDoubleClick="LvFilms_OnMouseDoubleClick">
+        <ListView Margin="10" Name="lvFilms">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
@@ -17,6 +17,11 @@
                     <GridViewColumn Header="Columns" Width="150" DisplayMemberBinding="{Binding cinema.columns}" />
                 </GridView>
             </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
 </Window>

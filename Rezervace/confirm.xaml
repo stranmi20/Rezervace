@@ -48,7 +48,7 @@
             </Label.RenderTransform>
         </Label>
         <Label Content="Zadejte Správné údaje" HorizontalAlignment="Left" Margin="227,301,0,0" VerticalAlignment="Top" Width="193" RenderTransformOrigin="0.442,-0.025" Foreground="red" x:Name="error" Visibility="Hidden"/>
-        <ComboBox HorizontalAlignment="Left" Margin="402,20,0,0" VerticalAlignment="Top" Width="164" RenderTransformOrigin="0.501,0.593">
+        <ComboBox HorizontalAlignment="Left" Margin="402,20,0,0" VerticalAlignment="Top" Width="164" RenderTransformOrigin="0.501,0.593" Name="ComboBox">
             <ComboBoxItem IsSelected="True">Rezervovat</ComboBoxItem>
             <ComboBoxItem>Nedostupný</ComboBoxItem>
         </ComboBox>

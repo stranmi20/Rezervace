@@ -7,15 +7,15 @@ using System.Windows.Media;
 
 namespace Rezervace
 {
-    public partial class MainWindow : Window
+    public partial class Seats : Window
     {
         private List<int[]> takenSeats = new List<int[]>();
         private int fontsize = 19;
-        public MainWindow()
+        public Seats(int rows, int columns)
         {
             InitializeComponent();
-            CreateRowsAndColums();
-            CreateButtons();
+            CreateRowsAndColums(rows, columns);
+            CreateButtons(rows, columns);
 
         }
         void button_Click(object sender, RoutedEventArgs e)
@@ -54,19 +54,19 @@ namespace Rezervace
             return index;
         }
 
-        void CreateRowsAndColums()
+        void CreateRowsAndColums(int rows, int columns)
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < rows+2; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
             }
-            for (int j = 0; j < 24; j++)
+            for (int j = 0; j < columns +2; j++)
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
         }
 
-        void CreateButtons()
+        void CreateButtons(int rows, int columns)
         {
             Label label = new Label()
             {
@@ -82,11 +82,11 @@ namespace Rezervace
             Grid.SetColumnSpan(label, 24);
             Grid.SetRow(label, 0);
             grid.Children.Add(label);
-            for (int i = 1; i < 11; i++)
+            for (int i = 1; i < rows + 1; i++)
             {
-                for (int j = 0; j < 24; j++)
+                for (int j = 0; j < columns+2; j++)
                 {
-                    if (j == 0 || j == 23)
+                    if (j == 0 || j == columns + 1)
                     {
                         Label lbl = new Label();
                         lbl.Content = i;
@@ -120,9 +120,9 @@ namespace Rezervace
                 Content = "Submit",
                 FontSize = 10
             };
-            Grid.SetRow(subButton, 12);
-            Grid.SetColumn(subButton, 9);
-            Grid.SetColumnSpan(subButton, 6);
+            Grid.SetRow(subButton, rows + 2);
+            Grid.SetColumn(subButton, columns/2);
+            Grid.SetColumnSpan(subButton, 2);
             subButton.Click += new RoutedEventHandler(subButton_Click);
             grid.Children.Add(subButton);
         }

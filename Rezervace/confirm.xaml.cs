@@ -20,8 +20,7 @@ namespace Rezervace
     /// </summary>
     public partial class confirm : Window
     {
-        private bool readytoclos = false;
-        private bool emailvalid = false;
+        private bool readytoclose = false;
         public confirm(List<int[]> takenseats)
         {
             InitializeComponent();
@@ -33,16 +32,22 @@ namespace Rezervace
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-
-            if (nameBox.Text != "" && IsValid(emailBox.Text))
+            var sa = ComboBox.SelectedItem;
+            if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
             {
-                readytoclos = true;
-            }
-            else
-            {
-                error.Visibility = Visibility.Visible;
-            }
-            if (readytoclos)
+                if (nameBox.Text != "" && IsValid(emailBox.Text))
+                {
+                    readytoclose = true;
+                }
+                else
+                {
+                    error.Visibility = Visibility.Visible;
+                }
+                if (readytoclose)
+                {
+                    window.Close();
+                }
+            } else
             {
                 window.Close();
             }

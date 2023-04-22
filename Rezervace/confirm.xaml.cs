@@ -68,5 +68,10 @@ namespace Rezervace
 
             return valid;
         }
+
+        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
     }
 }

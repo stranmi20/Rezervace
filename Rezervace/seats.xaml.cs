@@ -51,7 +51,7 @@ namespace Rezervace
                 if (tk[0] == seat[0] && tk[1] == seat[1]) { return index; }
                 index++;
             }
-            return index;
+            return -1;
         }
 
         void CreateRowsAndColums(int rows, int columns)

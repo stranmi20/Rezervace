@@ -11,52 +11,42 @@ namespace Rezervace
     {
         private List<int[]> takenSeats = new List<int[]>();
         private int fontsize = 19;
-        public Seats(int rows, int columns)
+        private string uuid;
+        public Seats(int rows, int columns, string uuid)
         {
             InitializeComponent();
             CreateRowsAndColums(rows, columns);
             CreateButtons(rows, columns);
-
+            this.uuid = uuid;
         }
+
         void button_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            btn.Background = btn.Background == Brushes.Red ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD")) : Brushes.Red;
-            if (btn.Background == Brushes.Red)
+            Int32.TryParse(btn.Tag.ToString(), out int tag);
+            Int32.TryParse(btn.Content.ToString(), out int content);
+            int[] seat = new int[2];
+            seat[0] = tag;
+            seat[1] = content;
+            takenSeats.Add(seat);
+            confirm cwindow = new confirm(takenSeats, uuid);
+            cwindow.Show();
+            dbload db = new dbload();
+            var database = db.DBLoad();
+            var stav = database.Query<Seat>("select Stav from Seat");
+            foreach (var s in stav)
             {
-                Int32.TryParse(btn.Tag.ToString(), out int tag);
-                Int32.TryParse(btn.Content.ToString(), out int content);
-                int[] seat = new int[2];
-                seat[0] = tag;
-                seat[1] = content;
-                takenSeats.Add(seat);
-            }
-            else
-            {
-                Int32.TryParse(btn.Tag.ToString(), out int tag);
-                Int32.TryParse(btn.Content.ToString(), out int content);
-                int[] seat = new int[2];
-                seat[0] = tag;
-                seat[1] = content;
-                int index = getIndex(takenSeats, seat);
-                takenSeats.RemoveAt(index);
-            }
-        }
+                if (s.Stav.ToString() = "Nedostupný")
+                {
 
-        private int getIndex(List<int[]> takenseats, int[] seat)
-        {
-            int index = 0;
-            foreach (int[] tk in takenseats)
-            {
-                if (tk[0] == seat[0] && tk[1] == seat[1]) { return index; }
-                index++;
+                }
             }
-            return -1;
+            takenSeats.Clear();
         }
 
         void CreateRowsAndColums(int rows, int columns)
         {
-            for (int i = 0; i < rows+2; i++)
+            for (int i = 0; i < rows+1; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
             }
@@ -113,31 +103,6 @@ namespace Rezervace
                     }
 
                 }
-            }
-
-            Button subButton = new Button()
-            {
-                Content = "Submit",
-                FontSize = 10
-            };
-            Grid.SetRow(subButton, rows + 2);
-            Grid.SetColumn(subButton, columns/2);
-            Grid.SetColumnSpan(subButton, 2);
-            subButton.Click += new RoutedEventHandler(subButton_Click);
-            grid.Children.Add(subButton);
-        }
-
-        void subButton_Click(object sender, RoutedEventArgs e)
-        {
-            bool confirmwindowready = true;
-            if (takenSeats.Count == 0)
-            {
-                confirmwindowready = false;
-            }
-            confirm cwindow = new confirm(takenSeats);
-            if (confirmwindowready)
-            {
-                cwindow.Show();
             }
         }
     }

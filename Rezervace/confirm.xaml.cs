@@ -21,17 +21,26 @@ namespace Rezervace
     public partial class confirm : Window
     {
         private bool readytoclose = false;
-        public confirm(List<int[]> takenseats)
+        private int seatrow;
+        private int seatcolumn;
+        private string uuid;
+        public confirm(List<int[]> takenseats, string uuid)
         {
             InitializeComponent();
-            foreach(var tk in takenseats)
+            foreach (var tk in takenseats)
             {
+                seatrow = tk[0];
+                seatcolumn = tk[1];
                 seats.Content += $"Ř:{tk[0]} Č:{tk[1]}, ";
             }
+
+            this.uuid = uuid;
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            dbload db = new dbload(); 
+            var database = db.DBLoad();
             var sa = ComboBox.SelectedItem;
             if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
             {
@@ -45,10 +54,30 @@ namespace Rezervace
                 }
                 if (readytoclose)
                 {
+                    Seat seat = new Seat();
+                    seat.SeatColumn = seatcolumn;
+                    seat.SeatRow = seatrow;
+                    seat.Stav = ComboBox.SelectionBoxItem.ToString();
+                    seat.Uuid = uuid;
+                    database.Insert(seat);
+
+                    Reservation reservation = new Reservation();
+                    reservation.Uuid = uuid;
+                    reservation.SeatRow = seatrow;
+                    reservation.SeatColumn = seatcolumn;
+                    reservation.Email = emailBox.Text;
+                    reservation.Name = nameBox.Text;
+                    database.Insert(reservation);
                     window.Close();
                 }
             } else
             {
+                Seat seat = new Seat();
+                seat.SeatColumn = seatcolumn;
+                seat.SeatRow = seatrow;
+                seat.Stav = ComboBox.SelectionBoxItem.ToString();
+                seat.Uuid = uuid;
+                database.Insert(seat);
                 window.Close();
             }
         }

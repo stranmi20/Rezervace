@@ -48,6 +48,7 @@ namespace Rezervace
             if (item != null && item.IsSelected)
             {
                 var s = item.Content;
+                var uuid = s.GetType().GetProperty("Uuid").GetValue(s, null);
                 var cinema = s.GetType().GetProperty("cinema").GetValue(s, null);
                 var rows = cinema.GetType().GetProperty("rows").GetValue(cinema, null);
                 var columns = cinema.GetType().GetProperty("columns").GetValue(cinema, null);
@@ -55,7 +56,7 @@ namespace Rezervace
                 Int32.TryParse(columns.ToString(), out int column);
                 
 
-                Seats seats = new Seats(row, column);
+                Seats seats = new Seats(row, column, uuid.ToString());
                 seats.Show();
             }
         }

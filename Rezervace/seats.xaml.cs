@@ -37,6 +37,7 @@ namespace Rezervace
             var stav = database.Query<Seat>("select * from Seat");
             Int32.TryParse(btn.Tag.ToString(), out int row);
             Int32.TryParse(btn.Content.ToString(), out int column);
+            btn.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD"));
             foreach (Seat s in stav)
             {
                 if (row == s.SeatRow && column == s.SeatColumn)
@@ -54,6 +55,7 @@ namespace Rezervace
                         btn.Background = Brushes.Gray;
                     }
                 }
+                
             }
             takenSeats.Clear();
         }

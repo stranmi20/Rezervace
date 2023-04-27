@@ -26,6 +26,7 @@ namespace Rezervace
         private string uuid;
         private bool newseat = true;
         private Seat existseat;
+        private Seat deleteseat;
 
         public confirm(List<int[]> takenseats, string uuid)
         {
@@ -45,6 +46,7 @@ namespace Rezervace
                 if (seat.SeatColumn == seatcolumn && seat.SeatRow == seatrow && seat.Uuid == uuid)
                 {
                     existseat = database.Query<Seat>("select * from Seat where SeatRow = ? AND SeatColumn = ?", seat.SeatColumn, seat.SeatRow).FirstOrDefault();
+                    newseat = false;
                 }
 
             }
@@ -55,20 +57,65 @@ namespace Rezervace
             dbload db = new dbload();
             var database = db.DBLoad();
             var sa = ComboBox.SelectedItem;
-            if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
+            if (ComboBox.SelectionBoxItem.ToString() == "Smazat")
             {
-                if (nameBox.Text != "" && IsValid(emailBox.Text))
+                database.Query<Seat>("DELETE from Seat where SeatRow = ? AND SeatColumn = ? AND Uuid = ?", seatrow, seatcolumn, uuid).FirstOrDefault();
+                database.Query<Seat>("DELETE from Reservation where SeatRow = ? AND SeatColumn = ? AND Uuid = ?", seatrow, seatcolumn, uuid).FirstOrDefault();
+                window.Close();
+            }
+            else
+            {
+                if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
                 {
-                    readytoclose = true;
+                    if (nameBox.Text != "" && IsValid(emailBox.Text))
+                    {
+                        readytoclose = true;
+                    }
+                    else
+                    {
+                        error.Visibility = Visibility.Visible;
+                    }
+                    if (readytoclose)
+                    {
+                        if (newseat)
+                        {
+                            Seat seat = new Seat();
+                            seat.SeatColumn = seatcolumn;
+                            seat.SeatRow = seatrow;
+                            seat.Stav = ComboBox.SelectionBoxItem.ToString();
+                            seat.Uuid = uuid;
+
+                            Reservation reservation = new Reservation();
+                            reservation.Uuid = uuid;
+                            reservation.SeatRow = seatrow;
+                            reservation.SeatColumn = seatcolumn;
+                            reservation.Email = emailBox.Text;
+                            reservation.Name = nameBox.Text;
+                            database.Insert(seat);
+                            database.Insert(reservation);
+                        }
+                        else
+                        {
+                            existseat.SeatColumn = seatcolumn;
+                            existseat.SeatRow = seatrow;
+                            existseat.Stav = ComboBox.SelectionBoxItem.ToString();
+                            existseat.Uuid = uuid;
+
+                            Reservation reservation = new Reservation();
+                            reservation.Uuid = uuid;
+                            reservation.SeatRow = seatrow;
+                            reservation.SeatColumn = seatcolumn;
+                            reservation.Email = emailBox.Text;
+                            reservation.Name = nameBox.Text;
+
+                            database.Update(existseat);
+                            database.Update(reservation);
+                        }
+                        window.Close();
+                    }
                 }
                 else
                 {
-                    error.Visibility = Visibility.Visible;
-                }
-                if (readytoclose)
-                {
-                    
-
                     if (newseat)
                     {
                         Seat seat = new Seat();
@@ -77,55 +124,18 @@ namespace Rezervace
                         seat.Stav = ComboBox.SelectionBoxItem.ToString();
                         seat.Uuid = uuid;
 
-                        Reservation reservation = new Reservation();
-                        reservation.Uuid = uuid;
-                        reservation.SeatRow = seatrow;
-                        reservation.SeatColumn = seatcolumn;
-                        reservation.Email = emailBox.Text;
-                        reservation.Name = nameBox.Text;
                         database.Insert(seat);
-                        database.Insert(reservation);
-                    } else
+                    }
+                    else
                     {
                         existseat.SeatColumn = seatcolumn;
                         existseat.SeatRow = seatrow;
                         existseat.Stav = ComboBox.SelectionBoxItem.ToString();
                         existseat.Uuid = uuid;
-
-                        Reservation reservation = new Reservation();
-                        reservation.Uuid = uuid;
-                        reservation.SeatRow = seatrow;
-                        reservation.SeatColumn = seatcolumn;
-                        reservation.Email = emailBox.Text;
-                        reservation.Name = nameBox.Text;
-
                         database.Update(existseat);
-                        database.Update(reservation);
                     }
                     window.Close();
                 }
-            }
-            else
-            {
-                if (newseat)
-                {
-                    Seat seat = new Seat();
-                    seat.SeatColumn = seatcolumn;
-                    seat.SeatRow = seatrow;
-                    seat.Stav = ComboBox.SelectionBoxItem.ToString();
-                    seat.Uuid = uuid;
-
-                    database.Insert(seat);
-                }
-                else
-                {
-                    existseat.SeatColumn = seatcolumn;
-                    existseat.SeatRow = seatrow;
-                    existseat.Stav = ComboBox.SelectionBoxItem.ToString();
-                    existseat.Uuid = uuid;
-                    database.Update(existseat);
-                }
-                window.Close();
             }
        
         }

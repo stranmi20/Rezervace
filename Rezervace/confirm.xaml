@@ -52,6 +52,7 @@
             <ComboBoxItem IsSelected="True">Prodáno na místě</ComboBoxItem>
             <ComboBoxItem>Rezervovat</ComboBoxItem>
             <ComboBoxItem>Nedostupný</ComboBoxItem>
+            <ComboBoxItem>Smazat</ComboBoxItem>
         </ComboBox>
     </Grid>
 </Window>

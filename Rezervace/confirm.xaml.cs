@@ -24,6 +24,9 @@ namespace Rezervace
         private int seatrow;
         private int seatcolumn;
         private string uuid;
+        private bool newseat = true;
+        private Seat existseat;
+
         public confirm(List<int[]> takenseats, string uuid)
         {
             InitializeComponent();
@@ -33,13 +36,23 @@ namespace Rezervace
                 seatcolumn = tk[1];
                 seats.Content += $"Ř:{tk[0]} Č:{tk[1]}, ";
             }
-
             this.uuid = uuid;
+            dbload db = new dbload();
+            var database = db.DBLoad();
+            var stav = database.Query<Seat>("select * from Seat");
+            foreach (var seat in stav)
+            {
+                if (seat.SeatColumn == seatcolumn && seat.SeatRow == seatrow && seat.Uuid == uuid)
+                {
+                    existseat = database.Query<Seat>("select * from Seat where SeatRow = ? AND SeatColumn = ?", seat.SeatColumn, seat.SeatRow).FirstOrDefault();
+                }
+
+            }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            dbload db = new dbload(); 
+            dbload db = new dbload();
             var database = db.DBLoad();
             var sa = ComboBox.SelectedItem;
             if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
@@ -54,32 +67,67 @@ namespace Rezervace
                 }
                 if (readytoclose)
                 {
+                    
+
+                    if (newseat)
+                    {
+                        Seat seat = new Seat();
+                        seat.SeatColumn = seatcolumn;
+                        seat.SeatRow = seatrow;
+                        seat.Stav = ComboBox.SelectionBoxItem.ToString();
+                        seat.Uuid = uuid;
+
+                        Reservation reservation = new Reservation();
+                        reservation.Uuid = uuid;
+                        reservation.SeatRow = seatrow;
+                        reservation.SeatColumn = seatcolumn;
+                        reservation.Email = emailBox.Text;
+                        reservation.Name = nameBox.Text;
+                        database.Insert(seat);
+                        database.Insert(reservation);
+                    } else
+                    {
+                        existseat.SeatColumn = seatcolumn;
+                        existseat.SeatRow = seatrow;
+                        existseat.Stav = ComboBox.SelectionBoxItem.ToString();
+                        existseat.Uuid = uuid;
+
+                        Reservation reservation = new Reservation();
+                        reservation.Uuid = uuid;
+                        reservation.SeatRow = seatrow;
+                        reservation.SeatColumn = seatcolumn;
+                        reservation.Email = emailBox.Text;
+                        reservation.Name = nameBox.Text;
+
+                        database.Update(existseat);
+                        database.Update(reservation);
+                    }
+                    window.Close();
+                }
+            }
+            else
+            {
+                if (newseat)
+                {
                     Seat seat = new Seat();
                     seat.SeatColumn = seatcolumn;
                     seat.SeatRow = seatrow;
                     seat.Stav = ComboBox.SelectionBoxItem.ToString();
                     seat.Uuid = uuid;
-                    database.Insert(seat);
 
-                    Reservation reservation = new Reservation();
-                    reservation.Uuid = uuid;
-                    reservation.SeatRow = seatrow;
-                    reservation.SeatColumn = seatcolumn;
-                    reservation.Email = emailBox.Text;
-                    reservation.Name = nameBox.Text;
-                    database.Insert(reservation);
-                    window.Close();
+                    database.Insert(seat);
                 }
-            } else
-            {
-                Seat seat = new Seat();
-                seat.SeatColumn = seatcolumn;
-                seat.SeatRow = seatrow;
-                seat.Stav = ComboBox.SelectionBoxItem.ToString();
-                seat.Uuid = uuid;
-                database.Insert(seat);
+                else
+                {
+                    existseat.SeatColumn = seatcolumn;
+                    existseat.SeatRow = seatrow;
+                    existseat.Stav = ComboBox.SelectionBoxItem.ToString();
+                    existseat.Uuid = uuid;
+                    database.Update(existseat);
+                }
                 window.Close();
             }
+       
         }
 
         private static bool IsValid(string email)

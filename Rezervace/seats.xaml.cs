@@ -11,13 +11,14 @@ namespace Rezervace
     {
         private List<int[]> takenSeats = new List<int[]>();
         private int fontsize = 19;
-        private string uuid;
+        private string Uuid;
         public Seats(int rows, int columns, string uuid)
         {
+            Uuid = uuid;
             InitializeComponent();
             CreateRowsAndColums(rows, columns);
-            CreateButtons(rows, columns);
-            this.uuid = uuid;
+            CreateButtons(rows, columns, uuid);
+
         }
 
         void button_Click(object sender, RoutedEventArgs e)
@@ -29,16 +30,29 @@ namespace Rezervace
             seat[0] = tag;
             seat[1] = content;
             takenSeats.Add(seat);
-            confirm cwindow = new confirm(takenSeats, uuid);
-            cwindow.Show();
+            confirm cwindow = new confirm(takenSeats, Uuid);
+            cwindow.ShowDialog();
             dbload db = new dbload();
             var database = db.DBLoad();
-            var stav = database.Query<Seat>("select Stav from Seat");
-            foreach (var s in stav)
+            var stav = database.Query<Seat>("select * from Seat");
+            Int32.TryParse(btn.Tag.ToString(), out int row);
+            Int32.TryParse(btn.Content.ToString(), out int column);
+            foreach (Seat s in stav)
             {
-                if (s.Stav.ToString() = "Nedostupný")
+                if (row == s.SeatRow && column == s.SeatColumn)
                 {
-
+                    if (s.Stav == "Prodáno na místě")
+                    {
+                        btn.Background = Brushes.Pink;
+                    }
+                    if (s.Stav == "Rezervovat")
+                    {
+                        btn.Background = Brushes.Red;
+                    }
+                    if (s.Stav == "Nedostupný")
+                    {
+                        btn.Background = Brushes.Gray;
+                    }
                 }
             }
             takenSeats.Clear();
@@ -56,7 +70,7 @@ namespace Rezervace
             }
         }
 
-        void CreateButtons(int rows, int columns)
+        void CreateButtons(int rows, int columns, string uuid)
         {
             Label label = new Label()
             {
@@ -87,6 +101,9 @@ namespace Rezervace
                     }
                     else
                     {
+                        dbload db = new dbload();
+                        var database = db.DBLoad();
+                        var stav = database.Query<Seat>("Select * from Seat");
                         Button button = new Button()
                         {
                             Content = string.Format(j.ToString()),
@@ -95,7 +112,26 @@ namespace Rezervace
                             Margin = new Thickness(5),
                             BorderBrush = Brushes.Blue,
                         };
-
+                        Int32.TryParse(button.Tag.ToString(), out int row);
+                        Int32.TryParse(button.Content.ToString(), out int column);
+                        foreach (Seat seat in stav)
+                        {
+                            if (row == seat.SeatRow && column == seat.SeatColumn && uuid == seat.Uuid)
+                            {
+                                if (seat.Stav == "Prodáno na místě")
+                                {
+                                    button.Background = Brushes.Pink;
+                                }
+                                if (seat.Stav == "Rezervovat")
+                                {
+                                    button.Background = Brushes.Red;
+                                }
+                                if (seat.Stav == "Nedostupný")
+                                {
+                                    button.Background = Brushes.Gray;
+                                }
+                            }     
+                        }
                         Grid.SetRow(button, i);
                         Grid.SetColumn(button, j);
                         button.Click += new RoutedEventHandler(button_Click);

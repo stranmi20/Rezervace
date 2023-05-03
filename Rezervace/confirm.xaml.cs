@@ -15,11 +15,9 @@ using System.Windows.Shapes;
 
 namespace Rezervace
 {
-    /// <summary>
-    /// Interakční logika pro confirm.xaml
-    /// </summary>
     public partial class confirm : Window
     {
+        // PROMĚNNÝ
         private bool readytoclose = false;
         private int seatrow;
         private int seatcolumn;
@@ -31,6 +29,8 @@ namespace Rezervace
         public confirm(List<int[]> takenseats, string uuid)
         {
             InitializeComponent();
+
+            // VYPSANÍ SEDADLA
             foreach (var tk in takenseats)
             {
                 seatrow = tk[0];
@@ -38,11 +38,15 @@ namespace Rezervace
                 seats.Content += $"Ř:{tk[0]} Č:{tk[1]}, ";
             }
             this.uuid = uuid;
+            // LOAD DATABASE
             dbload db = new dbload();
             var database = db.DBLoad();
+            // VYBRANÍ VŠECH SEDACĚK Z DB
             var stav = database.Query<Seat>("select * from Seat");
+
             foreach (var seat in stav)
             {
+                // POKUD JE SEDADLO UŽ V DB
                 if (seat.SeatColumn == seatcolumn && seat.SeatRow == seatrow && seat.Uuid == uuid)
                 {
                     existseat = database.Query<Seat>("select * from Seat where SeatRow = ? AND SeatColumn = ?", seat.SeatColumn, seat.SeatRow).FirstOrDefault();
@@ -54,9 +58,12 @@ namespace Rezervace
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            // LOAD DB
             dbload db = new dbload();
             var database = db.DBLoad();
             var sa = ComboBox.SelectedItem;
+
+            // SMAZANÍ SEDADLA
             if (ComboBox.SelectionBoxItem.ToString() == "Smazat")
             {
                 database.Query<Seat>("DELETE from Seat where SeatRow = ? AND SeatColumn = ? AND Uuid = ?", seatrow, seatcolumn, uuid).FirstOrDefault();
@@ -65,18 +72,22 @@ namespace Rezervace
             }
             else
             {
+                // REZERVACE SEDADLA
                 if (ComboBox.SelectionBoxItem.ToString() == "Rezervovat")
                 {
+                    // POKUD VYPLNIL VŠE
                     if (nameBox.Text != "" && IsValid(emailBox.Text))
                     {
                         readytoclose = true;
                     }
+                    // POKUD NE
                     else
                     {
                         error.Visibility = Visibility.Visible;
                     }
                     if (readytoclose)
                     {
+                        // NOVÉ SEDADLO
                         if (newseat)
                         {
                             Seat seat = new Seat();
@@ -94,6 +105,7 @@ namespace Rezervace
                             database.Insert(seat);
                             database.Insert(reservation);
                         }
+                        // UPDATE SEDADLA
                         else
                         {
                             existseat.SeatColumn = seatcolumn;
@@ -111,11 +123,14 @@ namespace Rezervace
                             database.Update(existseat);
                             database.Update(reservation);
                         }
+                        // ZAVŘENÍ OKNA
                         window.Close();
                     }
                 }
+                // POKUD SE NEJEDNÁ O REZERVACI
                 else
                 {
+                    // NOVÉ SEDADLO
                     if (newseat)
                     {
                         Seat seat = new Seat();
@@ -126,6 +141,7 @@ namespace Rezervace
 
                         database.Insert(seat);
                     }
+                    // UPDATE SEDADLA
                     else
                     {
                         existseat.SeatColumn = seatcolumn;
@@ -134,16 +150,17 @@ namespace Rezervace
                         existseat.Uuid = uuid;
                         database.Update(existseat);
                     }
+                    // ZAVŘENÍ OKNA
                     window.Close();
                 }
             }
        
         }
 
+        // FUNKCE NA VALIDACI EMAILU
         private static bool IsValid(string email)
         {
             bool valid = true;
-
             try
             {
                 var emailAddress = new MailAddress(email);
@@ -154,11 +171,6 @@ namespace Rezervace
             }
 
             return valid;
-        }
-
-        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
         }
     }
 }

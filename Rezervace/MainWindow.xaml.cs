@@ -23,14 +23,19 @@ namespace Rezervace
     /// </summary>
     public partial class Window1 : Window
     {
+        // PROMĚNNÝ
         private List<Film> films = new List<Film>();
         public Window1()
         {
             InitializeComponent();
+            // LIST S FILMY
             films = GetFilms();
+
+            // PŘIDANÍ FILMŮ DO LISTVIEW
             lvFilms.ItemsSource = films;
         }
 
+        // FUNKCE NA BRANÍ FILMŮ Z JSONU
         public List<Film> GetFilms()
         {
             using (StreamReader r = new StreamReader("films.json"))
@@ -41,12 +46,15 @@ namespace Rezervace
             return films;
         }
 
+        
+        // FUNKCE NA OTEVŘENÍ SÁLU FILMU
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = sender as ListViewItem;
 
             if (item != null && item.IsSelected)
             {
+                // ZÍSKAVÁNÍ SLOUPCE A ŘAD SÁLU
                 var s = item.Content;
                 var uuid = s.GetType().GetProperty("Uuid").GetValue(s, null);
                 var cinema = s.GetType().GetProperty("cinema").GetValue(s, null);
@@ -55,7 +63,7 @@ namespace Rezervace
                 Int32.TryParse(rows.ToString(), out int row);
                 Int32.TryParse(columns.ToString(), out int column);
                 
-
+                // OTEVŘENÍ OKNA SÁLU
                 Seats seats = new Seats(row, column, uuid.ToString());
                 seats.Show();
             }
@@ -63,12 +71,15 @@ namespace Rezervace
     }
 
 
+    // TŘÍDA KINA
     public class Cinema
     {
         public string name { get; set; }
         public int rows { get; set; }
         public int columns { get; set; }
     }
+
+    // TŘIDA FILMU
     public class Film
     {
         public string Uuid { get; set; }

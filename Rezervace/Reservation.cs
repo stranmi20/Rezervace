@@ -7,6 +7,7 @@ using SQLite;
 
 namespace Rezervace
 {
+    // TŘÍDO PRO VYTVOŘENÍ TABULKY DO DATABÁZE "REGISTRACE"
     internal class Reservation
     {
         [AutoIncrement, PrimaryKey]

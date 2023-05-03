@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Rezervace
 {
+    // TŘÍDO PRO VYTVOŘENÍ TABULKY DO DATABÁZE "SEAT"
     public class Seat
     {
         [PrimaryKey, AutoIncrement]

@@ -24,7 +24,6 @@ namespace Rezervace
         private string uuid;
         private bool newseat = true;
         private Seat existseat;
-        private Seat deleteseat;
 
         public confirm(List<int[]> takenseats, string uuid)
         {
@@ -39,7 +38,7 @@ namespace Rezervace
             }
             this.uuid = uuid;
             // LOAD DATABASE
-            dbload db = new dbload();
+            Dbload db = new Dbload();
             var database = db.DBLoad();
             // VYBRANÍ VŠECH SEDACĚK Z DB
             var stav = database.Query<Seat>("select * from Seat");
@@ -49,7 +48,7 @@ namespace Rezervace
                 // POKUD JE SEDADLO UŽ V DB
                 if (seat.SeatColumn == seatcolumn && seat.SeatRow == seatrow && seat.Uuid == uuid)
                 {
-                    existseat = database.Query<Seat>("select * from Seat where SeatRow = ? AND SeatColumn = ?", seat.SeatColumn, seat.SeatRow).FirstOrDefault();
+                    existseat = database.Query<Seat>("select * from Seat where SeatRow = ? AND SeatColumn = ?", seat.SeatRow, seat.SeatColumn).FirstOrDefault();
                     newseat = false;
                 }
 
@@ -59,7 +58,7 @@ namespace Rezervace
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             // LOAD DB
-            dbload db = new dbload();
+            Dbload db = new Dbload();
             var database = db.DBLoad();
             var sa = ComboBox.SelectedItem;
 

@@ -38,12 +38,13 @@ namespace Rezervace
 
             // OTEVŘENÍ CONFIRM OKNA
             confirm cwindow = new confirm(takenSeats, Uuid);
+
             cwindow.ShowDialog();
 
             // AŽ SE OKNO ZAVŘE
 
             // NAČTENÍ DB
-            dbload db = new dbload();
+            Dbload db = new Dbload();
             var database = db.DBLoad();
 
             // SELECT VŠECH SEDAČEK Z DB
@@ -131,7 +132,7 @@ namespace Rezervace
                     else
                     {
                         // LOAD DB
-                        dbload db = new dbload();
+                        Dbload db = new Dbload();
                         var database = db.DBLoad();
                         
                         // SELECT VŠECH SEDAČEK Z DB

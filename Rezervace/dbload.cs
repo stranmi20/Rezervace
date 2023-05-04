@@ -8,7 +8,7 @@ using SQLite;
 namespace Rezervace
 {
     // TŘÍDA PRO VYTVOŘENÍ NEBO LOADNUTÍ DATABASE
-    internal class dbload
+    internal class Dbload
     {
         public SQLiteConnection DBLoad()
         {

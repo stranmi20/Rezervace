@@ -63,8 +63,9 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -117,17 +118,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="dbload.cs" />
+    <Compile Include="Dbload.cs" />
     <Compile Include="Reservation.cs" />
     <Compile Include="Seat.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="confirm.xaml">
+    <Page Include="Confirm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="seats.xaml">
+    <Page Include="Seats.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -135,11 +136,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="confirm.xaml.cs">
-      <DependentUpon>confirm.xaml</DependentUpon>
+    <Compile Include="Confirm.xaml.cs">
+      <DependentUpon>Confirm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="seats.xaml.cs">
-      <DependentUpon>seats.xaml</DependentUpon>
+    <Compile Include="Seats.xaml.cs">
+      <DependentUpon>Seats.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -171,7 +172,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Rezervace_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

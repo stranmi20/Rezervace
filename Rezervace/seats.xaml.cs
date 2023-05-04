@@ -49,6 +49,7 @@ namespace Rezervace
 
             // SELECT VŠECH SEDAČEK Z DB
             var stav = database.Query<Seat>("select * from Seat");
+            var reserv = database.Query<Reservation>("select * from Reservation");
 
             // SLOUPEC, ŘADA
             Int32.TryParse(btn.Tag.ToString(), out int row);
@@ -58,22 +59,28 @@ namespace Rezervace
             btn.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFDDDDDD"));
             foreach (Seat s in stav)
             {
-                if (row == s.SeatRow && column == s.SeatColumn)
+                foreach (Reservation r in reserv)
                 {
-                    if (s.Stav == "Prodáno na místě")
+                    if (s.SeatColumn == r.SeatColumn && s.SeatRow == r.SeatRow && s.Uuid == r.Uuid)
                     {
-                        btn.Background = Brushes.Pink;
-                    }
-                    if (s.Stav == "Rezervovat")
-                    {
-                        btn.Background = Brushes.Red;
-                    }
-                    if (s.Stav == "Nedostupný")
-                    {
-                        btn.Background = Brushes.Gray;
+                        if (row == s.SeatRow && column == s.SeatColumn)
+                        {
+                            if (s.Stav == "Prodáno na místě")
+                            {
+                                btn.Background = Brushes.Pink;
+                            }
+                            if (s.Stav == "Rezervovat")
+                            {
+                                btn.Background = Brushes.Red;
+                                btn.ToolTip = $"Email: {r.Email}, Jmeno: {r.Name}";
+                            }
+                            if (s.Stav == "Nedostupný")
+                            {
+                                btn.Background = Brushes.Gray;
+                            }
+                        }
                     }
                 }
-                
             }
             // VYČISTĚNÍ LISTU
             takenSeats.Clear();
@@ -137,6 +144,7 @@ namespace Rezervace
                         
                         // SELECT VŠECH SEDAČEK Z DB
                         var stav = database.Query<Seat>("Select * from Seat");
+                        var reserv = database.Query<Reservation>("select * from Reservation");
 
                         // TVORBA SEDAČKY
                         Button button = new Button()
@@ -162,10 +170,19 @@ namespace Rezervace
                                 {
                                     button.Background = Brushes.Pink;
                                 }
+
                                 if (seat.Stav == "Rezervovat")
                                 {
-                                    button.Background = Brushes.Red;
+                                    foreach (Reservation r in reserv)
+                                    {
+                                        if (seat.SeatColumn == r.SeatColumn && seat.SeatRow == r.SeatRow && seat.Uuid == r.Uuid)
+                                        {
+                                            button.Background = Brushes.Red;
+                                            button.ToolTip = $"Email: {r.Email}, Jmeno: {r.Name}";
+                                        }
+                                    }
                                 }
+
                                 if (seat.Stav == "Nedostupný")
                                 {
                                     button.Background = Brushes.Gray;
